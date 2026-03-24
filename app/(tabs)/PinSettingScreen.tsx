@@ -1,11 +1,24 @@
+import CustomButton from '@/components/CustomButton'
 import CustomPin from '@/components/CustomPin'
 import { COLORS } from '@/constants/colors'
 import { Typography } from '@/constants/fonts'
+import { useRouter } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function PinSettingScreen() {
+
+  const router = useRouter();
+
+  const handleNextButton = () => {
+    router.replace('/(tabs)/PinSettingScreenAgain');
+  }
+
+  const handleBackButton = () => {
+    router.replace('/Login');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -15,6 +28,21 @@ export default function PinSettingScreen() {
 
         <View style={styles.content}>
           <CustomPin />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            label="ย้อนกลับ"
+            variant="red"
+            onPress={handleBackButton}
+            style={{ flex: 1 }}
+          />
+          <CustomButton
+            label="ยืนยัน"
+            variant="green"
+            onPress={handleNextButton}
+            style={{ flex: 1 }}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -30,10 +58,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 40,
   },
   header: {
     marginBottom: 40,
-    paddingHorizontal: 20,
+    width: '100%',
     alignItems: 'center',
   },
   title: {
@@ -46,5 +75,12 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
+    marginBottom: 40,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+    justifyContent: 'center',
   },
 })

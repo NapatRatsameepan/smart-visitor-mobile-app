@@ -10,7 +10,7 @@ interface CustomButtonProps {
   style?: ViewStyle;
 }
 
-export default function CustomButton({ label, onPress, variant = 'main' }: CustomButtonProps) {
+export default function CustomButton({ label, onPress, variant = 'main', style }: CustomButtonProps) {
   const getVariantStyle = () => {
 
     switch (variant) {
@@ -24,7 +24,7 @@ export default function CustomButton({ label, onPress, variant = 'main' }: Custo
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.7}
-      style={[styles.button, getVariantStyle()]}
+      style={[styles.button, getVariantStyle(), style]}
     >
       <Text style={styles.text}>
         {label}
