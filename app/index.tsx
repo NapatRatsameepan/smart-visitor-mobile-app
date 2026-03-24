@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import logo from '@/assets/logo.png';
+import logo from '../assets/logo.png'
 import CustomButton from '@/components/CustomButton';
 import CustomInput from '@/components/CustomInput';
 
@@ -13,7 +13,7 @@ export default function SignInScreen() {
   const router = useRouter();
 
   const handleSignIn = () => {
-    router.replace('/(tabs)');
+    router.replace('/(tabs)/VehicleBrandScreen');
   };
 
   return (
