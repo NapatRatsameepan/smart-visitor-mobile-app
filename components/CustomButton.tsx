@@ -36,10 +36,10 @@ export default function CustomButton({ label, onPress, variant = 'main' }: Custo
 const styles = StyleSheet.create({
   button: {
     width: '100%',
-    height: 80,
+    height: 40,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 30,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: Typography.bold,
     color: '#FFFFFF',
-    fontSize: 24,
+    fontSize: 16,
   },
 });

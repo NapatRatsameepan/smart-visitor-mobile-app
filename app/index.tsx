@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import logo from '../assets/logo.png'
+import logo from '@/assets/logo.png';
 import CustomButton from '@/components/CustomButton';
 import CustomInput from '@/components/CustomInput';
 
@@ -13,7 +13,7 @@ export default function SignInScreen() {
   const router = useRouter();
 
   const handleSignIn = () => {
-    router.replace('/(tabs)/VehicleBrandScreen');
+    router.replace('/(tabs)/PinSettingScreen');
   };
 
   return (
@@ -28,7 +28,6 @@ export default function SignInScreen() {
           />
         </View>
 
-        {/* ส่วนแสดง Form */}
         <View style={styles.formContainer}>
           <CustomInput
             label="ชื่อผู้ใช้"
@@ -65,21 +64,26 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 48,
+    paddingHorizontal: 40,
     justifyContent: 'center',
+    alignItems: 'stretch',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
+    width: '100%',
   },
   logo: {
-    width: 280,
-    height: 280,
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
   },
   formContainer: {
+    width: '100%',
     gap: 16,
   },
   buttonWrapper: {
+    width: '100%',
     marginTop: 24,
   },
 });
