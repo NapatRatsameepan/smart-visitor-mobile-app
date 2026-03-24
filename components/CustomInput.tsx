@@ -1,7 +1,8 @@
 import { COLORS } from '@/constants/colors';
 import { Typography } from '@/constants/fonts';
-import React from 'react';
-import { StyleProp, StyleSheet, Text, TextInput, View, ViewStyle } from 'react-native';
+import { Image } from 'expo-image';
+import React, { useState } from 'react';
+import { StyleProp, StyleSheet, Text, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 interface CustomInputProps {
   placeholder: string;
@@ -9,7 +10,7 @@ interface CustomInputProps {
   onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
   keyboardType?: 'default' | 'email-address' | 'numeric';
-  style?: StyleProp<ViewStyle>; // เปลี่ยนจาก className เป็น style
+  style?: StyleProp<ViewStyle>;
   label?: string;
 }
 
@@ -22,6 +23,8 @@ export default function CustomInput({
   style,
   label = ""
 }: CustomInputProps) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
   return (
     <View style={[styles.container, style]}>
       {label ? (
@@ -29,15 +32,31 @@ export default function CustomInput({
           {label}
         </Text>
       ) : null}
-      <TextInput
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={secureTextEntry}
-        keyboardType={keyboardType}
-        placeholderTextColor="#64748B"
-        style={styles.input}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder={placeholder}
+          value={value}
+          onChangeText={onChangeText}
+          secureTextEntry={secureTextEntry && !isPasswordVisible}
+          keyboardType={keyboardType}
+          placeholderTextColor="#64748B"
+          style={[styles.input, secureTextEntry && { paddingRight: 44 }]}
+        />
+        {secureTextEntry && (
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+            activeOpacity={0.7}
+          >
+            <Image
+              source={require('@/assets/icon/View.svg')}
+              style={{ width: 24, height: 24 }}
+              tintColor={isPasswordVisible ? COLORS.main : "#64748B"}
+              contentFit="contain"
+            />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 }
@@ -52,10 +71,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 4,
   },
+  inputContainer: {
+    position: 'relative',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  iconContainer: {
+    position: 'absolute',
+    right: 12,
+    zIndex: 1,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   input: {
+    width: '100%',
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 3,
+    borderRadius: 6,
     paddingTop: 4,
     paddingBottom: 4,
     paddingLeft: 12,

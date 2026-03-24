@@ -1,10 +1,11 @@
 import { COLORS } from '@/constants/colors'
+import { Typography } from '@/constants/fonts'
 import React, { useState } from 'react'
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const { width } = Dimensions.get('window')
 const PIN_LENGTH = 6
-const BUTTON_SIZE = width * 0.22 // ปรับขนาดปุ่มตามขนาดหน้าจอ
+const BUTTON_SIZE = width * 0.22
 
 export default function CustomPin() {
   const [pin, setPin] = useState('')
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: Typography.bold,
     color: '#FFFFFF',
     textDecorationLine: 'none',
   },
