@@ -1,7 +1,4 @@
-import {
-  NotoSansThai_400Regular,
-  NotoSansThai_700Bold
-} from '@expo-google-fonts/noto-sans-thai';
+import { NotoSansThai_400Regular, NotoSansThai_700Bold } from '@expo-google-fonts/noto-sans-thai';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
