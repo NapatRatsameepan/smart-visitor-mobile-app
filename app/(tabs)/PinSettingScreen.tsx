@@ -3,31 +3,55 @@ import CustomPin from '@/components/CustomPin'
 import { COLORS } from '@/constants/colors'
 import { Typography } from '@/constants/fonts'
 import { useRouter } from 'expo-router'
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function PinSettingScreen() {
 
   const router = useRouter();
+  const [step, setStep] = useState(1);
+  const [pin, setPin] = useState("");
+  const [confirmPin, setConfirmPin] = useState("");
 
   const handleNextButton = () => {
-    router.replace('/(tabs)/PinSettingScreenAgain');
-  }
+    if (step === 1) {
+      if (pin.length < 6) {
+        return Alert.alert("แจ้งเตือน", "กรุณาระบุ PIN ให้ครบ 6 หลัก");
+      }
+      setStep(2); // ไปขั้นตอนยืนยัน
+    } else {
+      if (pin === confirmPin) {
+        router.replace('/(tabs)'); // สำเร็จ
+      } else {
+        Alert.alert("ผิดพลาด", "PIN ไม่ตรงกัน กรุณาลองใหม่");
+        setConfirmPin(""); // ล้างค่าที่กรอกผิดเพื่อให้กรอกใหม่ได้ง่ายขึ้น
+      }
+    }
+  };
 
   const handleBackButton = () => {
-    router.replace('/Login');
+    if (step === 2) {
+      setStep(1);
+    } else {
+      router.replace('/Login');
+    }
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentWrapper}>
         <View style={styles.header}>
-          <Text style={styles.title}>กรุณาตั้งค่า PIN สำหรับเข้าใช้งาน</Text>
+          <Text style={styles.title}>
+            {step === 1 ? "กรุณาตั้งค่า PIN สำหรับเข้าใช้งาน" : "ยืนยัน PIN อีกครั้ง"}
+          </Text>
         </View>
 
         <View style={styles.content}>
-          <CustomPin />
+          <CustomPin
+            value={step === 1 ? pin : confirmPin}
+            onValueChange={step === 1 ? setPin : setConfirmPin}
+          />
         </View>
 
         <View style={styles.buttonContainer}>
@@ -38,7 +62,7 @@ export default function PinSettingScreen() {
             style={{ flex: 1 }}
           />
           <CustomButton
-            label="ยืนยัน"
+            label={step === 1 ? "ต่อไป" : "ยืนยัน"}
             variant="green"
             onPress={handleNextButton}
             style={{ flex: 1 }}
@@ -67,7 +91,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '600',
     color: COLORS.main,
     textAlign: 'center',
     lineHeight: 28,

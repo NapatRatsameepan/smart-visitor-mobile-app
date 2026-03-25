@@ -1,5 +1,7 @@
+import { COLORS } from '@/constants/colors';
+import { Typography } from '@/constants/fonts';
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Text, Platform } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface HeaderProps {
     title: string;
@@ -45,14 +47,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 20,
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.white,
         borderBottomWidth: 1,
         borderBottomColor: '#f0f0f0',
-        // จัดการระยะห่างด้านบนสำหรับ Android
-        marginTop: Platform.OS === 'android' ? 30 : 0,
     },
     leftContainer: {
-        width: 80, // กำหนดความกว้างให้เท่ากับฝั่งขวา เพื่อให้ส่วนกลางอยู่กลางจริงๆ
+        width: 80,
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
-        color: '#1A2433',
+        fontFamily: Typography.bold,
+        color: COLORS.main,
         textAlign: 'center',
     },
     rightContainer: {
-        width: 80, // ต้องเท่ากับ leftContainer เพื่อความสมดุล
+        width: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
@@ -84,12 +84,11 @@ const styles = StyleSheet.create({
     worldIcon: {
         width: 22,
         height: 22,
-        tintColor: '#1A2433',
     },
     profileCircle: {
         width: 35,
         height: 35,
-        backgroundColor: '#D9D9D9',
+        backgroundColor: COLORS.white,
         borderRadius: 17.5,
     },
 });

@@ -1,19 +1,18 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
-import Header from './Header';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Footer from './Footer';
+import Header from './Header';
 
 interface LayoutProps {
     children?: React.ReactNode;
-    title: string; // 1. เพิ่มให้ Layout รับค่า title ได้
+    title: string;
 }
 
-// 2. รับค่า title เข้ามาในฟังก์ชัน
 const MainLayout: React.FC<LayoutProps> = ({ children, title }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.wrapper}>
-                {/* 3. ส่งค่า title ต่อไปให้ Header */}
                 <Header title={title} />
 
                 <View style={styles.content}>
@@ -29,12 +28,11 @@ const MainLayout: React.FC<LayoutProps> = ({ children, title }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff', // สีพื้นหลังของ SafeArea
-        // สำหรับ Android บางรุ่น SafeAreaView อาจไม่ทำงานเอง ต้องช่วยดัน PaddingTop นิดนึง
+        backgroundColor: '#fff',
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     wrapper: {
-        flex: 1, // ให้หุ้มเนื้อหาทั้งหมดข้างใน
+        flex: 1,
     },
     content: {
         flex: 1,
