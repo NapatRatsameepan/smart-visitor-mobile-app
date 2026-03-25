@@ -7,19 +7,22 @@ const { width } = Dimensions.get('window')
 const PIN_LENGTH = 6
 const BUTTON_SIZE = width * 0.22
 
-export default function CustomPin() {
-  const [pin, setPin] = useState('')
+interface CustomPinProps {
+  value: string;
+  onValueChange: (value: string) => void;
+}
 
+export default function CustomPin({ value, onValueChange }: CustomPinProps) {
   // ฟังก์ชันเมื่อกดตัวเลข
   const handlePressNumber = (num: string) => {
-    if (pin.length < PIN_LENGTH) {
-      setPin(prev => prev + num)
+    if (value.length < PIN_LENGTH) {
+      onValueChange(value + num);
     }
   }
 
   // ฟังก์ชันลบตัวเลข
   const handleDelete = () => {
-    setPin(prev => prev.slice(0, -1))
+    onValueChange(value.slice(0, -1));
   }
 
   // ข้อมูลปุ่มตัวเลข (null คือช่องว่าง)
@@ -30,7 +33,7 @@ export default function CustomPin() {
       {/* ส่วนแสดงจุด PIN */}
       <View style={styles.dotsContainer}>
         {Array.from({ length: PIN_LENGTH }).map((_, index) => {
-          const isActive = index < pin.length;
+          const isActive = index < value.length;
           return (
             <View
               key={index}
