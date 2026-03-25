@@ -1,7 +1,8 @@
 import { COLORS } from '@/constants/colors'
 import { Typography } from '@/constants/fonts'
-import React, { useState } from 'react'
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+import { Dimensions, StyleSheet, View } from 'react-native'
+import CustomButton from './CustomButton'
 
 const { width } = Dimensions.get('window')
 const PIN_LENGTH = 6
@@ -56,17 +57,14 @@ export default function CustomPin({ value, onValueChange }: CustomPinProps) {
           const isDelete = item === 'ลบ'
 
           return (
-            <TouchableOpacity
+            <CustomButton
               key={index}
-              style={[
-                styles.button,
-                { backgroundColor: isDelete ? COLORS.red : COLORS.main }
-              ]}
+              label={item.toString()}
+              variant={isDelete ? 'red' : 'main'}
               onPress={() => isDelete ? handleDelete() : handlePressNumber(item.toString())}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.buttonText}>{item}</Text>
-            </TouchableOpacity>
+              style={styles.button}
+              textStyle={styles.buttonText}
+            />
           )
         })}
       </View>
@@ -101,8 +99,6 @@ const styles = StyleSheet.create({
     width: BUTTON_SIZE,
     height: BUTTON_SIZE,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: 15,
     elevation: 3,
     shadowColor: '#000',
@@ -119,6 +115,5 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontFamily: Typography.bold,
     color: '#FFFFFF',
-    textDecorationLine: 'none',
   },
 })

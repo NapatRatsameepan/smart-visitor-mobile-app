@@ -1,18 +1,26 @@
 import { COLORS } from '@/constants/colors';
 import { Typography } from '@/constants/fonts';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, ViewStyle, TextStyle, View } from 'react-native';
 
 interface CustomButtonProps {
-  label: string;
+  label?: string;
+  icon?: React.ReactNode;
   onPress: () => void;
   variant?: 'main' | 'green' | 'red';
   style?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
-export default function CustomButton({ label, onPress, variant = 'main', style }: CustomButtonProps) {
+export default function CustomButton({ 
+  label, 
+  icon, 
+  onPress, 
+  variant = 'main', 
+  style, 
+  textStyle 
+}: CustomButtonProps) {
   const getVariantStyle = () => {
-
     switch (variant) {
       case 'green': return styles.bgGreen;
       case 'red': return styles.bgRed;
@@ -26,9 +34,12 @@ export default function CustomButton({ label, onPress, variant = 'main', style }
       activeOpacity={0.7}
       style={[styles.button, getVariantStyle(), style]}
     >
-      <Text style={styles.text}>
-        {label}
-      </Text>
+      {icon && <View style={styles.iconContainer}>{icon}</View>}
+      {label && (
+        <Text style={[styles.text, textStyle]}>
+          {label}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 }
@@ -42,6 +53,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconContainer: {
+    marginBottom: 4,
   },
   bgMain: {
     backgroundColor: COLORS.main,
