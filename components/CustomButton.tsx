@@ -1,7 +1,7 @@
 import { COLORS } from '@/constants/colors';
 import { Typography } from '@/constants/fonts';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ViewStyle, TextStyle, View } from 'react-native';
+import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 interface CustomButtonProps {
   label?: string;
@@ -12,13 +12,13 @@ interface CustomButtonProps {
   textStyle?: TextStyle;
 }
 
-export default function CustomButton({ 
-  label, 
-  icon, 
-  onPress, 
-  variant = 'main', 
-  style, 
-  textStyle 
+export default function CustomButton({
+  label,
+  icon,
+  onPress,
+  variant = 'main',
+  style,
+  textStyle
 }: CustomButtonProps) {
   const getVariantStyle = () => {
     switch (variant) {

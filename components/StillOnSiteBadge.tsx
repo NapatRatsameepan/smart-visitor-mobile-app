@@ -19,24 +19,24 @@ export default function StillOnSiteBadge({ count }: StillOnSiteBadgeProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     backgroundColor: COLORS.red,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
   },
   count: {
-    fontSize: 36,
+    fontSize: 48,
     fontFamily: Typography.bold,
     color: COLORS.white,
-    lineHeight: 36,
+    lineHeight: 48,
     marginBottom: -5,
     textAlign: 'center',
   },
   label: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: Typography.bold,
     color: COLORS.white,
     textAlign: 'center',
