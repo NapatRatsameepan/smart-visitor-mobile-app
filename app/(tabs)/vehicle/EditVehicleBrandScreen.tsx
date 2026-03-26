@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
-import MainLayout from '../../components/MainLayout';
+import React from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import MainLayout from '../../../components/MainLayout';
 
 const EditVehicleBrandScreen = () => {
     const router = useRouter();

@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import MainLayout from '../../components/MainLayout';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MainLayout from '../../../components/MainLayout';
 
 const VisitPurposeDetailScreen = () => {
     const router = useRouter();

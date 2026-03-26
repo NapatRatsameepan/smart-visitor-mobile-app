@@ -1,5 +1,6 @@
+import { COLORS } from '@/constants/colors';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 const Footer = () => {
     return (
@@ -16,11 +17,11 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.white,
     },
     versionText: {
         fontSize: 10,
-        color: '#A0A0A0',
+        color: COLORS.main,
     },
 });
 

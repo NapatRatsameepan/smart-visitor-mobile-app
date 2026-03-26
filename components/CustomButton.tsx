@@ -1,21 +1,30 @@
 import { COLORS } from '@/constants/colors';
 import { Typography } from '@/constants/fonts';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 interface CustomButtonProps {
-  label: string;
+  label?: string;
+  icon?: React.ReactNode;
   onPress: () => void;
-  variant?: 'main' | 'green' | 'red';
+  variant?: 'main' | 'green' | 'red' | 'outline';
   style?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
-export default function CustomButton({ label, onPress, variant = 'main', style }: CustomButtonProps) {
+export default function CustomButton({
+  label,
+  icon,
+  onPress,
+  variant = 'main',
+  style,
+  textStyle
+}: CustomButtonProps) {
   const getVariantStyle = () => {
-
     switch (variant) {
       case 'green': return styles.bgGreen;
       case 'red': return styles.bgRed;
+      case 'outline': return styles.bgOutline;
       default: return styles.bgMain;
     }
   };
@@ -26,16 +35,18 @@ export default function CustomButton({ label, onPress, variant = 'main', style }
       activeOpacity={0.7}
       style={[styles.button, getVariantStyle(), style]}
     >
-      <Text style={styles.text}>
-        {label}
-      </Text>
+      {icon && <View style={styles.iconContainer}>{icon}</View>}
+      {label && (
+        <Text style={[styles.text, textStyle]}>
+          {label}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    width: '100%',
     height: 40,
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -43,18 +54,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  iconContainer: {
+    marginBottom: 4,
+  },
   bgMain: {
     backgroundColor: COLORS.main,
+    width: '100%',
   },
   bgGreen: {
     backgroundColor: COLORS.green,
+    width: '100%',
   },
   bgRed: {
     backgroundColor: COLORS.red,
+    width: '100%',
+  },
+  bgOutline: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: COLORS.white,
   },
   text: {
     fontFamily: Typography.bold,
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 16,
   },
 });

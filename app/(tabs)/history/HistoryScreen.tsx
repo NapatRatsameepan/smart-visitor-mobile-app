@@ -1,7 +1,7 @@
-import React from 'react';
 import { useRouter } from 'expo-router';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
-import MainLayout from '../../components/MainLayout';
+import React from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MainLayout from '../../../components/MainLayout';
 
 // ข้อมูลจำลองตามดีไซน์
 const DATA = Array(15).fill({
