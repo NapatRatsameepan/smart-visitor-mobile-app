@@ -6,6 +6,7 @@ import VisitCounter from '@/components/VisitCounter'
 import { COLORS } from '@/constants/colors'
 import { Typography } from '@/constants/fonts'
 import { Image } from 'expo-image'
+import { useRouter } from 'expo-router'
 import React from 'react'
 import { Dimensions, StyleSheet, View } from 'react-native'
 
@@ -13,7 +14,19 @@ const { width } = Dimensions.get('window');
 const SCAN_BUTTON_SIZE = (width - 60) / 2;
 const NAV_BUTTON_SIZE = (width - 40 - 36) / 4;
 
+
 export default function HomepageScreen() {
+
+  const router = useRouter();
+
+  const handleScanIn = () => {
+    router.push('/(tabs)/scanin/ScanInPage');
+  }
+
+  const handleScanOut = () => {
+    router.push('/(tabs)/scanout/ScanOutPage');
+  }
+
   return (
     <MainLayout title='SmartVisitor'>
       <View style={styles.chartContainer}>
@@ -38,7 +51,7 @@ export default function HomepageScreen() {
               contentFit="contain"
             />
           }
-          onPress={() => { }}
+          onPress={handleScanIn}
           variant="green"
           style={styles.scanButton}
           textStyle={styles.scanButtonText}
@@ -53,7 +66,7 @@ export default function HomepageScreen() {
               contentFit="contain"
             />
           }
-          onPress={() => { }}
+          onPress={handleScanOut}
           variant="red"
           style={styles.scanButton}
           textStyle={styles.scanButtonText}

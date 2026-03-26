@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Platform } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons'; // สำหรับไอคอนลูกศร Dropdown
-import MainLayout from '../../components/MainLayout';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import MainLayout from '../../../components/MainLayout';
 
 const EditVisitorScreen = () => {
     const router = useRouter();

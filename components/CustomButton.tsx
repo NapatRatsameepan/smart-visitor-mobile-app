@@ -7,7 +7,7 @@ interface CustomButtonProps {
   label?: string;
   icon?: React.ReactNode;
   onPress: () => void;
-  variant?: 'main' | 'green' | 'red';
+  variant?: 'main' | 'green' | 'red' | 'outline';
   style?: ViewStyle;
   textStyle?: TextStyle;
 }
@@ -24,6 +24,7 @@ export default function CustomButton({
     switch (variant) {
       case 'green': return styles.bgGreen;
       case 'red': return styles.bgRed;
+      case 'outline': return styles.bgOutline;
       default: return styles.bgMain;
     }
   };
@@ -46,7 +47,6 @@ export default function CustomButton({
 
 const styles = StyleSheet.create({
   button: {
-    width: '100%',
     height: 40,
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -59,16 +59,24 @@ const styles = StyleSheet.create({
   },
   bgMain: {
     backgroundColor: COLORS.main,
+    width: '100%',
   },
   bgGreen: {
     backgroundColor: COLORS.green,
+    width: '100%',
   },
   bgRed: {
     backgroundColor: COLORS.red,
+    width: '100%',
+  },
+  bgOutline: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: COLORS.white,
   },
   text: {
     fontFamily: Typography.bold,
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 16,
   },
 });

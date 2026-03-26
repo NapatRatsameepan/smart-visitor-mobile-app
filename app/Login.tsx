@@ -48,6 +48,7 @@ export default function SignInScreen() {
             <CustomButton
               label='ลงชื่อเข้าใช้'
               onPress={handleSignIn}
+              style={{ height: 60 }}
             />
           </View>
         </View>
