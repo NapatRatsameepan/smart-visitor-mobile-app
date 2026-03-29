@@ -31,7 +31,7 @@ export default function ScanInPage() {
     cameraRef,
     onComplete: () => {
       console.log("Process complete");
-      router.back();
+      router.push('/(tabs)/scanin/Review');
     },
     onExit: () => router.back(),
   });

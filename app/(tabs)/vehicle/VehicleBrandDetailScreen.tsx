@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import MainLayout from '../../components/MainLayout';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MainLayout from '../../../components/MainLayout';
 
 const VehicleBrandDetailScreen = () => {
     const router = useRouter();
@@ -13,7 +13,7 @@ const VehicleBrandDetailScreen = () => {
                     <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
                         <Text style={styles.backText}>‹ ย้อนกลับ</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push('/(tabs)/EditVehicleBrandScreen')}>
+                    <TouchableOpacity onPress={() => router.push('/(tabs)/vehicle/EditVehicleBrandScreen')}>
                         <Text style={styles.editText}>แก้ไข</Text>
                     </TouchableOpacity>
                 </View>

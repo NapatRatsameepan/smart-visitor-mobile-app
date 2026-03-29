@@ -6,9 +6,9 @@ import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 
 interface SubHeaderProps {
   onBack: () => void;
-  title?: string;               // Optional: ถ้าไม่ส่งมาจะไม่แสดง
-  showProgress?: boolean;       // Optional: ควบคุมการเปิด-ปิด Progress Bar
-  progressWidth?: any;          // รับค่า Animated ที่คำนวณแล้วมาแสดง
+  title?: string;
+  showProgress?: boolean;
+  progressWidth?: any;
 }
 
 const SubHeader = ({

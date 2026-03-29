@@ -1,4 +1,5 @@
 import { CameraView } from 'expo-camera';
+import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Animated } from 'react-native';
 
@@ -13,6 +14,7 @@ export const useCameraWorkflow = ({ cameraRef, onComplete, onExit }: WorkflowPro
   const [idImage, setIdImage] = useState<string | undefined>(undefined);
   const [carImage, setCarImage] = useState<string | undefined>(undefined);
   const progressAnim = useRef(new Animated.Value(25)).current;
+  const router = useRouter();
 
   useEffect(() => {
     Animated.timing(progressAnim, {
@@ -49,7 +51,7 @@ export const useCameraWorkflow = ({ cameraRef, onComplete, onExit }: WorkflowPro
     const isPreview = step === 2 || step === 4;
     if (!isPreview) {
       if (step === 1) setStep(3);
-      else if (step === 3) onExit();
+      else if (step === 3) router.push('/(tabs)/scanin/Review');
     } else {
       setStep(prev => prev - 1);
     }

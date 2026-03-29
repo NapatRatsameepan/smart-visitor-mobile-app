@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
     paddingLeft: 12,
     paddingRight: 12,
-    height: 40,
+    height: 50,
     fontFamily: Typography.regular,
     color: COLORS.main,
     fontSize: 16,
