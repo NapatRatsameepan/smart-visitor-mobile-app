@@ -59,15 +59,12 @@ const styles = StyleSheet.create({
   },
   bgMain: {
     backgroundColor: COLORS.main,
-    width: '100%',
   },
   bgGreen: {
     backgroundColor: COLORS.green,
-    width: '100%',
   },
   bgRed: {
     backgroundColor: COLORS.red,
-    width: '100%',
   },
   bgOutline: {
     backgroundColor: 'transparent',

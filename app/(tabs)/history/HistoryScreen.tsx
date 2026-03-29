@@ -26,11 +26,11 @@ const HistoryScreen = () => {
             <TouchableOpacity
                 style={styles.actionCell}
                 // เมื่อกดที่ไอคอนสมุดโน้ต ให้ไปหน้าแก้ไข
-                onPress={() => router.push('/(tabs)/VisitorDetailScreen')}
+                onPress={() => router.push('/(tabs)/history/VisitorDetailScreen')}
             >
                 <Image
                     // ใช้ Path ตามที่คุณวางไฟล์ไว้ใน assets/
-                    source={require('../../assets/Desk_alt.png')}
+                    source={require('../../../assets/Desk_alt.png')}
                     style={styles.viewIcon}
                     resizeMode="contain"
                 />
