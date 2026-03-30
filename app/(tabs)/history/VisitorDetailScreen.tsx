@@ -10,6 +10,7 @@ const VisitorDetailScreen = () => {
     const InfoField = ({ label, value }: { label: string, value: string }) => (
         <View style={styles.inputGroup}>
             <Text style={styles.label}>{label}</Text>
+            {/* แก้ไขจาก div เป็น View เรียบร้อยครับ */}
             <View style={styles.readOnlyInput}>
                 <Text style={styles.inputText}>{value}</Text>
             </View>
@@ -24,7 +25,7 @@ const VisitorDetailScreen = () => {
                     <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
                         <Text style={styles.backText}>‹ ย้อนกลับ</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push('/(tabs)/EditVisitorScreen')}>
+                    <TouchableOpacity onPress={() => router.push('/(tabs)/history/EditVisitorScreen')}>
                         <Text style={styles.editText}>แก้ไข</Text>
                     </TouchableOpacity>
                 </View>
@@ -58,7 +59,11 @@ const VisitorDetailScreen = () => {
                     <TouchableOpacity style={styles.closeBtn} onPress={() => router.back()}>
                         <Text style={styles.closeBtnText}>ย้อนกลับ</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.printBtn}>
+
+                    <TouchableOpacity
+                        style={styles.printBtn}
+                        onPress={() => router.back()}
+                    >
                         <Text style={styles.printBtnText}>ปริ้นใบเยี่ยมชม</Text>
                     </TouchableOpacity>
                 </View>

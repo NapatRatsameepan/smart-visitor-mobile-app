@@ -39,12 +39,15 @@ const HistoryScreen = () => {
     );
 
     return (
-        /* แก้ไขจุดที่ 1: ส่ง title เข้าไปเพื่อให้ Header แสดงชื่อหน้าข้างโลโก้ */
         <MainLayout title="HistoryScreen">
             <View style={styles.container}>
                 {/* ส่วน Header ของเนื้อหา */}
                 <View style={styles.topActions}>
-                    <TouchableOpacity style={styles.backBtn}>
+                    {/* แก้ไขจุดนี้: ใส่ onPress ให้กับปุ่มย้อนกลับ */}
+                    <TouchableOpacity
+                        style={styles.backBtn}
+                        onPress={() => router.replace('/(tabs)')}
+                    >
                         <Text style={styles.backText}>‹ ย้อนกลับ</Text>
                     </TouchableOpacity>
 
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 15,
     },
-    backBtn: { flexDirection: 'row', alignItems: 'center' },
+    backBtn: { flexDirection: 'row', alignItems: 'center', paddingRight: 20 }, // เพิ่ม padding เพื่อให้กดง่ายขึ้น
     backText: { fontSize: 18, fontWeight: 'bold', color: '#1A2433' },
     filterRow: { flexDirection: 'row' },
     dateBox: {
@@ -133,7 +136,6 @@ const styles = StyleSheet.create({
     viewIcon: {
         width: 18,
         height: 18,
-        /* แก้ไขจุดที่ 2: ลบ tintColor ออกเพื่อให้แสดงสีต้นฉบับของไฟล์ PNG */
     },
     pagination: {
         flexDirection: 'row',

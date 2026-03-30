@@ -40,7 +40,7 @@ const DepartmentScreen = () => {
                             <Text style={{ width: 40, color: '#333' }}>{item.id}</Text>
                             <Text style={{ flex: 1, color: '#333' }}>{item.name}</Text>
                             <TouchableOpacity
-                                onPress={() => router.push('/(tabs)/DepartmentDetailScreen')}
+                                onPress={() => router.push('/(tabs)/department/DepartmentDetailScreen')}
                                 style={{ width: 60, alignItems: 'flex-end' }}
                             >
                                 <Ionicons name="document-text-outline" size={22} color="#1A2433" />
