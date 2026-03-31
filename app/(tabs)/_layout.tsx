@@ -7,6 +7,8 @@ export default function TabsLayout() {
     <>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="PinSettingScreen" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </>
