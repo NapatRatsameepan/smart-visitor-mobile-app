@@ -8,7 +8,7 @@ import Constants from 'expo-constants';
 const getBaseUrl = () => {
   // 1. If running on Web
   if (typeof window !== 'undefined') {
-    return 'http://localhost:3000';
+    return 'http://localhost:3001';
   }
 
   // 2. If running on Mobile (Emulator or Physical Device)
@@ -18,10 +18,10 @@ const getBaseUrl = () => {
 
   if (!localhost) {
     // Fallback if hostUri is not available
-    return 'http://10.0.2.2:3000'; // Default for Android Emulator
+    return 'http://10.0.2.2:3001'; // Default for Android Emulator
   }
 
-  return `http://${localhost}:3000`;
+  return `http://${localhost}:3001`;
 };
 
 const BASE_URL = getBaseUrl();
