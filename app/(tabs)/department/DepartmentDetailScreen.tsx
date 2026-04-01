@@ -14,7 +14,7 @@ const DepartmentDetailScreen = () => {
                     <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
                         <Text style={styles.backText}>‹ ย้อนกลับ</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push('/(tabs)/EditDepartmentScreen')}>
+                    <TouchableOpacity onPress={() => router.push('/(tabs)/department/EditDepartmentScreen')}>
                         <Text style={styles.editText}>แก้ไข</Text>
                     </TouchableOpacity>
                 </View>
