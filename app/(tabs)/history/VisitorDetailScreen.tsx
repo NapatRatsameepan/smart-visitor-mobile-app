@@ -24,7 +24,7 @@ const VisitorDetailScreen = () => {
                     <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
                         <Text style={styles.backText}>‹ ย้อนกลับ</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push('/(tabs)/EditVisitorScreen')}>
+                    <TouchableOpacity onPress={() => router.push('/(tabs)/history/EditVisitorScreen')}>
                         <Text style={styles.editText}>แก้ไข</Text>
                     </TouchableOpacity>
                 </View>

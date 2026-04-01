@@ -21,6 +21,7 @@ export default function ScanInPage() {
     idImage,
     carImage,
     isPreview,
+    isLoading,
     stepName,
     progressWidth,
     handleTakePhoto,
@@ -29,9 +30,12 @@ export default function ScanInPage() {
     handleBack,
   } = useCameraWorkflow({
     cameraRef,
-    onComplete: () => {
-      console.log("Process complete");
-      router.push('/(tabs)/scanin/Review');
+    onComplete: (data) => {
+      console.log("Process complete with data:", data);
+      router.push({
+        pathname: '/(tabs)/scanin/Review',
+        params: { data: JSON.stringify(data) }
+      });
     },
     onExit: () => router.back(),
   });
@@ -82,8 +86,15 @@ export default function ScanInPage() {
               style={StyleSheet.absoluteFill}
               resizeMode="cover"
             />
+            {isLoading && (
+              <View style={[StyleSheet.absoluteFill, styles.loadingOverlay]}>
+                <ActivityIndicator size="large" color={COLORS.white} />
+                <Text style={styles.loadingText}>กำลังประมวลผล OCR...</Text>
+              </View>
+            )}
           </View>
         )}
+
 
         {/* ID Skeleton Overlay (Only Step 1) */}
         {step === 1 && (

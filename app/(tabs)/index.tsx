@@ -7,17 +7,18 @@ import { COLORS } from '@/constants/colors'
 import { Typography } from '@/constants/fonts'
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
-import React from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import React, { useRef } from 'react'
+import { Dimensions, StyleSheet, View, Alert, PermissionsAndroid, Platform, Linking } from 'react-native'
+import { BLEPrinter } from 'react-native-thermal-receipt-printer-image-qr'
+import QRCode from 'react-native-qrcode-svg'
 
 const { width } = Dimensions.get('window');
 const SCAN_BUTTON_SIZE = (width - 60) / 2;
 const NAV_BUTTON_SIZE = (width - 40 - 36) / 4;
 
-
 export default function HomepageScreen() {
-
   const router = useRouter();
+  const qrRef = useRef<any>(null);
 
   const handleScanIn = () => {
     router.push('/(tabs)/scanin/ScanInPage');
@@ -27,8 +28,131 @@ export default function HomepageScreen() {
     router.push('/(tabs)/scanout/ScanOutPage');
   }
 
+  const requestBluetoothPermissions = async () => {
+    if (Platform.OS === 'android') {
+      if (Number(Platform.Version) >= 31) {
+        const result = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+          PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        ]);
+
+        const connectGranted = result[PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT] === PermissionsAndroid.RESULTS.GRANTED;
+        const scanGranted = result[PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN] === PermissionsAndroid.RESULTS.GRANTED;
+        const locationGranted = result[PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION] === PermissionsAndroid.RESULTS.GRANTED;
+
+        if (!connectGranted || !scanGranted || !locationGranted) {
+          Alert.alert("Permissions Required", "Bluetooth and Location permissions are required.");
+          return false;
+        }
+        return true;
+      } else {
+        const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        return result === PermissionsAndroid.RESULTS.GRANTED;
+      }
+    }
+    return true;
+  };
+
+  const mockQrData = "VISITOR-123456789";
+
+  const handleTestPrint = async () => {
+    try {
+      const hasPermission = await requestBluetoothPermissions();
+      if (!hasPermission) return;
+
+      if (!qrRef.current) {
+        Alert.alert("Error", "QR Generator not ready");
+        return;
+      }
+
+      await BLEPrinter.init();
+      const devices = await BLEPrinter.getDeviceList();
+
+      if (!devices || devices.length === 0) {
+        Alert.alert("ไม่พบเครื่องพิมพ์", "กรุณาเปิดบลูทูธและเชื่อมต่อเครื่องพิมพ์ก่อนครับ");
+        return;
+      }
+
+      const printer = devices[0];
+      await BLEPrinter.connectPrinter(printer.inner_mac_address);
+
+      const toThaiCP874 = (str: string) => {
+        if (!str) return '';
+        let result = '';
+        for (let i = 0; i < str.length; i++) {
+          const code = str.charCodeAt(i);
+          if (code >= 0x0e01 && code <= 0x0e5b) {
+            result += String.fromCharCode(code - 0x0e00 + 0xa0);
+          } else {
+            result += str[i];
+          }
+        }
+        return result;
+      };
+
+      const now = new Date();
+      const formattedDate = now.toLocaleDateString('th-TH', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }) + ' น.';
+
+      const SET_THAI_CP = '\x1b\x74\xff';
+
+      // 1. Generate QR Base64 then Print
+      qrRef.current.toDataURL(async (dataURL: string) => {
+        try {
+          // --- ส่วนหัว ---
+          let header = SET_THAI_CP;
+          header += "<C><B>บัตรเยี่ยมชม</B></C>\n";
+          header += "<C>" + formattedDate + "</C>\n";
+          header += "<C>--------------------------------</C>\n";
+          header += "ผู้มาติดต่อ: นายทดสอบ ระบบ\n";
+          header += "ทะเบียนรถ:  1กข 9999 กทม."; // **ลบ \n ออกเพื่อให้ QR ชิดขึ้น**
+
+          await BLEPrinter.printBill(toThaiCP874(header), { encoding: 'latin1' });
+
+          // --- ส่วนรูปภาพ QR Code ---
+          // ปรับขนาดลงเหลือ 180 เพื่อลดขอบขาว (Margin) ในตัวรูปภาพเอง
+          await BLEPrinter.printImageBase64(dataURL, {
+            imageWidth: 250,
+            imageHeight: 250,
+            paddingX: 85 // ปรับ padding ให้รูปอยู่กึ่งกลาง (สำหรับกระดาษ 58mm)
+          });
+
+          // --- ส่วนท้าย ---
+          // ไม่ต้องมี \n นำหน้า เพราะการพิมพ์ภาพเสร็จจะขึ้นบรรทัดใหม่ให้อัตโนมัติอยู่แล้ว
+          let footer = "--------------------------------";
+          footer += "\n"; // เว้นระยะท้ายสุดเพื่อให้ฉีกกระดาษพ้นใบมีด
+
+          await BLEPrinter.printBill(toThaiCP874(footer), { encoding: 'latin1' });
+
+          Alert.alert("สำเร็จ", `เชื่อมต่อ ${printer.device_name} เรียบร้อยแล้ว`);
+        } catch (err: any) {
+          Alert.alert("Print Error", err.message);
+        }
+      });
+
+    } catch (error: any) {
+      console.error("Test Print Error:", error);
+      Alert.alert("พิมพ์ไม่สำเร็จ", error.message || "ไม่สามารถเชื่อมต่อเครื่องพิมพ์ได้");
+    }
+  }
+
   return (
     <MainLayout title='SmartVisitor'>
+      {/* Hidden QR Generator */}
+      <View style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }}>
+        <QRCode
+          value={mockQrData}
+          size={200}
+          getRef={(ref) => (qrRef.current = ref)}
+        />
+      </View>
+
       <View style={styles.chartContainer}>
         <VisitCounter count={10} />
         <View style={styles.badgeContainer}>
@@ -129,6 +253,15 @@ export default function HomepageScreen() {
           onPress={() => { }}
           style={styles.navButton}
           textStyle={styles.navButtonText}
+        />
+      </View>
+
+      <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
+        <CustomButton
+          label='ทดสอบพิมพ์ (Bluetooth)'
+          onPress={handleTestPrint}
+          variant="outline"
+          style={{ width: '100%', height: 50 }}
         />
       </View>
     </MainLayout >
