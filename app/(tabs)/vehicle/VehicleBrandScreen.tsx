@@ -1,33 +1,59 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, TextInput, Image } from 'react-native';
 import MainLayout from '../../../components/MainLayout';
 import Pagination from '../../../components/Pagination';
+import TopBar from '../../../components/TopBar';
+import { COLORS } from '@/constants/colors';
+import { Typography } from '@/constants/fonts';
 
 const VehicleBrandScreen = () => {
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 5;
+    const [searchQuery, setSearchQuery] = useState(''); // State สำหรับเก็บคำค้นหา
     const itemsPerPage = 10;
 
-    const brands = Array(itemsPerPage).fill(null).map((_, index) => {
-        const globalIndex = ((currentPage - 1) * itemsPerPage) + (index + 1);
-        return {
-            id: globalIndex,
-            name: globalIndex === 1 ? 'Toyota' : globalIndex === 2 ? 'Honda' : `ยี่ห้อรถที่ ${globalIndex}`
-        };
-    });
+    // สร้างข้อมูลจำลองทั้งหมด (Mock Data) เพื่อให้ค้นหาได้จากข้อมูลทั้งหมด
+    const allBrands = useMemo(() => {
+        return Array(50).fill(null).map((_, index) => {
+            const id = index + 1;
+            let name = `ยี่ห้อรถที่ ${id}`;
+            if (id === 1) name = 'Toyota';
+            if (id === 2) name = 'Honda';
+            if (id === 3) name = 'Mazda';
+            if (id === 4) name = 'Ford';
+            return { id, name };
+        });
+    }, []);
+
+    // ส่วนของ Logic การค้นหา (Filtering)
+    const filteredBrands = useMemo(() => {
+        return allBrands.filter(brand =>
+            brand.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [searchQuery, allBrands]);
+
+    // คำนวณ Pagination จากข้อมูลที่ถูกกรองแล้ว
+    const totalPages = Math.ceil(filteredBrands.length / itemsPerPage) || 1;
+    const displayBrands = filteredBrands.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     const renderItem = ({ item }: { item: any }) => (
         <View style={styles.tableRow}>
-            <Text style={{ width: 40, color: '#333' }}>{item.id}</Text>
-            <Text style={{ flex: 1, color: '#333' }}>{item.name}</Text>
+            <Text style={{ width: 40, color: COLORS.main, fontFamily: Typography.regular }}>{item.id}</Text>
+            <Text style={{ flex: 1, color: COLORS.main, fontFamily: Typography.regular }}>{item.name}</Text>
             <TouchableOpacity
                 onPress={() => router.push('/(tabs)/vehicle/VehicleBrandDetailScreen')}
-                style={{ width: 60, alignItems: 'flex-end' }}
+                style={{ width: 60, alignItems: 'center' }}
             >
-                <Ionicons name="document-text-outline" size={22} color="#1A2433" />
+                <Image
+                    source={require('../../../assets/Desk_alt.png')}
+                    style={{ width: 22, height: 22 }}
+                    resizeMode="contain"
+                    tintColor={COLORS.main}
+                />
             </TouchableOpacity>
         </View>
     );
@@ -35,26 +61,37 @@ const VehicleBrandScreen = () => {
     return (
         <MainLayout title="จัดการยี่ห้อรถ">
             <View style={styles.container}>
-                <View style={styles.topRow}>
-                    <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-                        <Text style={styles.backText}>‹ ย้อนกลับ</Text>
-                    </TouchableOpacity>
-                    <View style={styles.searchBox}>
-                        <Text style={styles.searchText}>ค้นหาที่นี่</Text>
-                    </View>
-                </View>
+                <TopBar
+                    rightElement={
+                        <View style={styles.searchBox}>
+                            <TextInput
+                                style={styles.searchInput}
+                                placeholder="ค้นหาที่นี่"
+                                placeholderTextColor={COLORS.greyFont}
+                                value={searchQuery}
+                                onChangeText={(text) => {
+                                    setSearchQuery(text);
+                                    setCurrentPage(1); // รีเซ็ตหน้ากลับไปหน้า 1 เมื่อมีการค้นหา
+                                }}
+                            />
+                        </View>
+                    }
+                />
 
                 <View style={styles.tableHeader}>
                     <Text style={[styles.headerCol, { width: 40 }]}>#</Text>
                     <Text style={[styles.headerCol, { flex: 1 }]}>ยี่ห้อรถ</Text>
-                    <Text style={[styles.headerCol, { width: 60, textAlign: 'right' }]}>เพิ่มเติม</Text>
+                    <Text style={[styles.headerCol, { width: 60, textAlign: 'center' }]}>ดู</Text>
                 </View>
 
                 <FlatList
-                    data={brands}
+                    data={displayBrands}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={
+                        <Text style={{ textAlign: 'center', marginTop: 20, color: COLORS.greyFont, fontFamily: Typography.regular }}>ไม่พบข้อมูลที่ค้นหา</Text>
+                    }
                 />
 
                 <Pagination
@@ -62,24 +99,33 @@ const VehicleBrandScreen = () => {
                     total={totalPages}
                     onPageChange={(page: number) => setCurrentPage(page)}
                 />
-
-                <Text style={styles.versionText}>v 0.0.1 - ME Group Enterprise Co., Ltd. 2025</Text>
             </View>
         </MainLayout>
     );
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 },
-    topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 },
-    backBtn: { flexDirection: 'row', alignItems: 'center' },
-    backText: { fontSize: 18, fontWeight: 'bold', color: '#1A2433' },
-    searchBox: { borderWidth: 1, borderColor: '#eee', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 6, minWidth: 100 },
-    searchText: { color: '#ccc', fontSize: 12, textAlign: 'center' },
-    tableHeader: { flexDirection: 'row', backgroundColor: '#1A2433', padding: 12, borderRadius: 4 },
-    headerCol: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
-    tableRow: { flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderBottomColor: '#eee', alignItems: 'center' },
-    versionText: { textAlign: 'center', color: '#ccc', fontSize: 10, paddingVertical: 20 }
+    container: { flex: 1, backgroundColor: COLORS.white, paddingHorizontal: 20 },
+    searchBox: {
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        paddingHorizontal: 10,
+        borderRadius: 8,
+        minWidth: 150,
+        height: 40,
+        justifyContent: 'center',
+        backgroundColor: COLORS.white
+    },
+    searchInput: {
+        color: COLORS.main,
+        fontSize: 14,
+        padding: 0,
+        fontFamily: Typography.regular
+    },
+    tableHeader: { flexDirection: 'row', backgroundColor: COLORS.main, padding: 12, borderRadius: 8 },
+    headerCol: { color: COLORS.white, fontFamily: Typography.bold, fontSize: 14 },
+    tableRow: { flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderBottomColor: COLORS.border, alignItems: 'center' },
+    versionText: { textAlign: 'center', color: COLORS.greyFont, fontSize: 10, paddingVertical: 20, fontFamily: Typography.regular }
 });
 
 export default VehicleBrandScreen;
