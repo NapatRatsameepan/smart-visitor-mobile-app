@@ -4,25 +4,32 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import CustomDropdown from '../CustomDropDown'
 
-export default function VisitDetailsSection() {
+interface Props {
+  data: any;
+  onChange: (field: string, value: any) => void;
+  missions?: { label: string, value: any }[];
+  departments?: { label: string, value: any }[];
+}
+
+export default function VisitDetailsSection({ data, onChange, missions = [], departments = [] }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        รายละเอียดภารกิจเยี่ยมชม
-      </Text>
+      <Text style={styles.title}>รายละเอียดการเยี่ยมชม</Text>
+
       <CustomDropdown
         label='แผนกที่ติดต่อ'
-        data={[]}
-        value={''}
-        placeholder='เลือกแผนกที่ติดต่อที่นี่'
-        onChange={() => { }}
+        data={departments}
+        value={data.departmentId || ''}
+        placeholder='เลือกแผนกที่นี่'
+        onChange={(item) => onChange('departmentId', item.value)}
       />
+
       <CustomDropdown
-        label='ภารกิจเยี่ยมชม'
-        data={[]}
-        value={''}
-        placeholder='เลือกภารกิจเยี่ยมชมที่นี่'
-        onChange={() => { }}
+        label='วัตถุประสงค์'
+        data={missions}
+        value={data.missionId || ''}
+        placeholder='เลือกวัตถุประสงค์ที่นี่'
+        onChange={(item) => onChange('missionId', item.value)}
       />
     </View>
   )
@@ -31,7 +38,7 @@ export default function VisitDetailsSection() {
 const styles = StyleSheet.create({
   container: {
     gap: 10,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   title: {
     fontSize: 24,
@@ -39,3 +46,4 @@ const styles = StyleSheet.create({
     color: COLORS.main,
   }
 })
+
