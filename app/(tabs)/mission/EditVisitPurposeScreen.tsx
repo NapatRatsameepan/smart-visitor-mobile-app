@@ -1,36 +1,45 @@
+import { COLORS } from '@/constants/colors';
+import { Typography } from '@/constants/fonts';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import MainLayout from '../../../components/MainLayout';
+import CustomInput from '@/components/CustomInput';
+import CustomButton from '@/components/CustomButton';
+import TopBar from '@/components/TopBar';
 
 const EditVisitPurposeScreen = () => {
     const router = useRouter();
+    const [purpose, setPurpose] = useState("วางบิล");
 
     return (
         <MainLayout title="จัดการภารกิจเยี่ยมชม">
             <View style={styles.container}>
-                <View style={styles.topRow}>
-                    <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-                        <Text style={styles.backText}>‹ ย้อนกลับ</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.headerActionText}>แก้ไขข้อมูลภารกิจเยี่ยมชม</Text>
-                </View>
+                <TopBar title="แก้ไขข้อมูลภารกิจเยี่ยมชม" />
 
                 <View style={styles.inputGroup}>
-                    <Text style={styles.label}>ภารกิจเยี่ยมชม</Text>
-                    <TextInput
-                        style={styles.input}
-                        defaultValue="วางบิล"
+                    <CustomInput
+                        label="ภารกิจเยี่ยมชม"
+                        placeholder="กรอกภารกิจเยี่ยมชม"
+                        value={purpose}
+                        onChangeText={setPurpose}
                     />
                 </View>
 
                 <View style={styles.footerButtons}>
-                    <TouchableOpacity style={styles.cancelBtn} onPress={() => router.back()}>
-                        <Text style={styles.cancelBtnText}>ย้อนกลับ</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.saveBtn} onPress={() => router.back()}>
-                        <Text style={styles.saveBtnText}>บันทึก</Text>
-                    </TouchableOpacity>
+                    <CustomButton
+                        label="ย้อนกลับ"
+                        onPress={() => router.back()}
+                        variant="outline"
+                        style={styles.cancelBtn}
+                        textStyle={{ color: COLORS.main }}
+                    />
+                    <CustomButton
+                        label="บันทึก"
+                        onPress={() => router.back()}
+                        variant="green"
+                        style={styles.saveBtn}
+                    />
                 </View>
 
 
@@ -40,21 +49,12 @@ const EditVisitPurposeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 },
-    topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 },
-    backBtn: { flexDirection: 'row', alignItems: 'center' },
-    backText: { fontSize: 18, fontWeight: 'bold', color: '#1A2433' },
-    headerActionText: { fontSize: 16, fontWeight: 'bold', color: '#1A2433' },
+    container: { flex: 1, backgroundColor: COLORS.white, paddingHorizontal: 20 },
     inputGroup: { marginTop: 20 },
-    label: { fontSize: 14, fontWeight: 'bold', color: '#333', marginBottom: 10 },
-    input: { borderWidth: 1, borderColor: '#ccc', padding: 12, borderRadius: 8, color: '#333' },
     footerButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 'auto', marginBottom: 30 },
-    cancelBtn: { borderWidth: 1, borderColor: '#1A2433', paddingVertical: 15, borderRadius: 12, width: '45%', alignItems: 'center' },
-    cancelBtnText: { color: '#1A2433', fontWeight: 'bold' },
-    saveBtn: { backgroundColor: '#4CAF50', paddingVertical: 15, borderRadius: 12, width: '50%', alignItems: 'center' },
-    saveBtnText: { color: '#fff', fontWeight: 'bold' },
-    footer: { marginBottom: 10 },
-    versionText: { textAlign: 'center', color: '#ccc', fontSize: 10 }
+    cancelBtn: { width: '45%', height: 50, borderRadius: 12 },
+    saveBtn: { width: '50%', height: 50, borderRadius: 12 },
+    versionText: { textAlign: 'center', color: COLORS.greyFont, fontSize: 10, fontFamily: Typography.regular }
 });
 
 export default EditVisitPurposeScreen;

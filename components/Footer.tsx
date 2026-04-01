@@ -1,4 +1,5 @@
 import { COLORS } from '@/constants/colors';
+import { Typography } from '@/constants/fonts';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
     versionText: {
         fontSize: 10,
         color: COLORS.main,
+        fontFamily: Typography.regular,
     },
 });
 

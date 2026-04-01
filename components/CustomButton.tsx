@@ -47,15 +47,16 @@ export default function CustomButton({
 
 const styles = StyleSheet.create({
   button: {
-    height: 40,
+    height: 50,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 15,
+    borderRadius: 12,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   iconContainer: {
-    marginBottom: 4,
+    marginRight: 8,
   },
   bgMain: {
     backgroundColor: COLORS.main,
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   bgOutline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: COLORS.white,
+    borderColor: COLORS.main,
   },
   text: {
     fontFamily: Typography.bold,

@@ -78,13 +78,13 @@ const styles = StyleSheet.create({
     fontFamily: Typography.bold,
     color: COLORS.main,
     fontSize: 16,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   dropdown: {
     width: '100%',
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 6,
+    borderRadius: 8,
     height: 50,
     paddingHorizontal: 12,
     backgroundColor: 'white',
@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
-    borderRadius: 6,
+    borderRadius: 8,
   },
 });

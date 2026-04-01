@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   progressBarContainer: {
     height: 6,
     width: '50%',
-    backgroundColor: '#E2E8F0',
+    backgroundColor: COLORS.border,
     borderRadius: 4,
     alignSelf: 'center',
   },
