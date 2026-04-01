@@ -31,7 +31,6 @@ export default function ScanInPage() {
   } = useCameraWorkflow({
     cameraRef,
     onComplete: (data) => {
-      console.log("Process complete with data:", data);
       router.push({
         pathname: '/(tabs)/scanin/Review',
         params: { data: JSON.stringify(data) }
