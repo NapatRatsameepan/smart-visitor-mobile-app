@@ -14,18 +14,37 @@ const { width } = Dimensions.get('window');
 const SCAN_BUTTON_SIZE = (width - 60) / 2;
 const NAV_BUTTON_SIZE = (width - 40 - 36) / 4;
 
-
 export default function HomepageScreen() {
-
   const router = useRouter();
 
+  // ฟังก์ชันจัดการการนำทาง (Path ตรงตามโครงสร้างโฟลเดอร์ย่อยใน Explorer)
   const handleScanIn = () => {
     router.push('/(tabs)/scanin/ScanInPage');
-  }
+  };
 
   const handleScanOut = () => {
     router.push('/(tabs)/scanout/ScanOutPage');
-  }
+  };
+
+  const handleHistory = () => {
+    // แก้ไข Path: ต้องเข้าโฟลเดอร์ history ก่อนแล้วตามด้วยชื่อไฟล์
+    router.push('/(tabs)/history/HistoryScreen');
+  };
+
+  const handleDepartment = () => {
+    // แก้ไข Path: ต้องเข้าโฟลเดอร์ department ก่อนแล้วตามด้วยชื่อไฟล์
+    router.push('/(tabs)/department/DepartmentScreen');
+  };
+
+  const handleVehicle = () => {
+    // แก้ไข Path: ต้องเข้าโฟลเดอร์ vehicle ก่อนแล้วตามด้วยชื่อไฟล์
+    router.push('/(tabs)/vehicle/VehicleBrandScreen');
+  };
+
+  const handleMission = () => {
+    // แก้ไข Path: ต้องเข้าโฟลเดอร์ mission ก่อนแล้วตามด้วยชื่อไฟล์
+    router.push('/(tabs)/mission/VisitPurposeScreen');
+  };
 
   return (
     <MainLayout title='SmartVisitor'>
@@ -84,7 +103,7 @@ export default function HomepageScreen() {
               contentFit="contain"
             />
           }
-          onPress={() => { }}
+          onPress={handleHistory}
           style={styles.navButton}
           textStyle={styles.navButtonText}
         />
@@ -98,7 +117,7 @@ export default function HomepageScreen() {
               contentFit="contain"
             />
           }
-          onPress={() => { }}
+          onPress={handleDepartment}
           style={styles.navButton}
           textStyle={styles.navButtonText}
         />
@@ -112,7 +131,7 @@ export default function HomepageScreen() {
               contentFit="contain"
             />
           }
-          onPress={() => { }}
+          onPress={handleVehicle}
           style={styles.navButton}
           textStyle={styles.navButtonText}
         />
@@ -126,7 +145,7 @@ export default function HomepageScreen() {
               contentFit="contain"
             />
           }
-          onPress={() => { }}
+          onPress={handleMission}
           style={styles.navButton}
           textStyle={styles.navButtonText}
         />

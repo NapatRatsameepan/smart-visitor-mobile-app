@@ -13,7 +13,7 @@ const VisitPurposeDetailScreen = () => {
                     <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
                         <Text style={styles.backText}>‹ ย้อนกลับ</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push('/(tabs)/EditVisitPurposeScreen')}>
+                    <TouchableOpacity onPress={() => router.push('/(tabs)/mission/EditVisitPurposeScreen')}>
                         <Text style={styles.editText}>แก้ไข</Text>
                     </TouchableOpacity>
                 </View>

@@ -1,22 +1,43 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MainLayout from '../../../components/MainLayout';
+import Pagination from '../../../components/Pagination';
 
 const DepartmentScreen = () => {
     const router = useRouter();
 
-    // ข้อมูลตัวอย่างสำหรับแสดงในตาราง
-    const departments = [
-        { id: 1, name: 'ฝ่ายขาย' },
-        { id: 2, name: 'ฝ่ายซ่อมบำรุง' },
-    ];
+    // ส่วนจัดการหน้า
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = 5;
+    const itemsPerPage = 10;
+
+    // ข้อมูลจำลองที่รันตามเลขหน้า
+    const departments = Array(itemsPerPage).fill(null).map((_, index) => {
+        const globalIndex = ((currentPage - 1) * itemsPerPage) + (index + 1);
+        return {
+            id: globalIndex,
+            name: globalIndex === 1 ? 'ฝ่ายขาย' : globalIndex === 2 ? 'ฝ่ายซ่อมบำรุง' : `แผนกที่ ${globalIndex}`
+        };
+    });
+
+    const renderItem = ({ item }: { item: any }) => (
+        <View style={styles.tableRow}>
+            <Text style={{ width: 40, color: '#333' }}>{item.id}</Text>
+            <Text style={{ flex: 1, color: '#333' }}>{item.name}</Text>
+            <TouchableOpacity
+                onPress={() => router.push('/(tabs)/department/DepartmentDetailScreen')}
+                style={{ width: 60, alignItems: 'flex-end' }}
+            >
+                <Ionicons name="document-text-outline" size={22} color="#1A2433" />
+            </TouchableOpacity>
+        </View>
+    );
 
     return (
         <MainLayout title="จัดการแผนก">
             <View style={styles.container}>
-                {/* แถวบน: ปุ่มย้อนกลับและช่องค้นหา */}
                 <View style={styles.topRow}>
                     <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
                         <Text style={styles.backText}>‹ ย้อนกลับ</Text>
@@ -26,30 +47,26 @@ const DepartmentScreen = () => {
                     </View>
                 </View>
 
-                {/* ส่วนหัวของตาราง */}
                 <View style={styles.tableHeader}>
                     <Text style={[styles.headerCol, { width: 40 }]}>#</Text>
                     <Text style={[styles.headerCol, { flex: 1 }]}>แผนก</Text>
                     <Text style={[styles.headerCol, { width: 60, textAlign: 'right' }]}>เพิ่มเติม</Text>
                 </View>
 
-                {/* รายการแผนกในตาราง */}
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    {departments.map((item) => (
-                        <View key={item.id} style={styles.tableRow}>
-                            <Text style={{ width: 40, color: '#333' }}>{item.id}</Text>
-                            <Text style={{ flex: 1, color: '#333' }}>{item.name}</Text>
-                            <TouchableOpacity
-                                onPress={() => router.push('/(tabs)/DepartmentDetailScreen')}
-                                style={{ width: 60, alignItems: 'flex-end' }}
-                            >
-                                <Ionicons name="document-text-outline" size={22} color="#1A2433" />
-                            </TouchableOpacity>
-                        </View>
-                    ))}
-                </ScrollView>
+                <FlatList
+                    data={departments}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id.toString()}
+                    showsVerticalScrollIndicator={false}
+                />
 
+                <Pagination
+                    current={currentPage}
+                    total={totalPages}
+                    onPageChange={(page: number) => setCurrentPage(page)}
+                />
 
+                <Text style={styles.versionText}>v 0.0.1 - ME Group Enterprise Co., Ltd. 2025</Text>
             </View>
         </MainLayout>
     );
@@ -57,43 +74,15 @@ const DepartmentScreen = () => {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 },
-    topRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 15
-    },
+    topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 },
     backBtn: { flexDirection: 'row', alignItems: 'center' },
     backText: { fontSize: 18, fontWeight: 'bold', color: '#1A2433' },
-    searchBox: {
-        borderWidth: 1,
-        borderColor: '#eee',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 6,
-        minWidth: 100
-    },
+    searchBox: { borderWidth: 1, borderColor: '#eee', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 6, minWidth: 100 },
     searchText: { color: '#ccc', fontSize: 12, textAlign: 'center' },
-    tableHeader: {
-        flexDirection: 'row',
-        backgroundColor: '#1A2433',
-        padding: 12,
-        borderRadius: 4
-    },
+    tableHeader: { flexDirection: 'row', backgroundColor: '#1A2433', padding: 12, borderRadius: 4 },
     headerCol: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
-    tableRow: {
-        flexDirection: 'row',
-        padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-        alignItems: 'center'
-    },
-    versionText: {
-        textAlign: 'center',
-        color: '#ccc',
-        fontSize: 10,
-        paddingVertical: 20
-    }
+    tableRow: { flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderBottomColor: '#eee', alignItems: 'center' },
+    versionText: { textAlign: 'center', color: '#ccc', fontSize: 10, paddingVertical: 20 }
 });
 
 export default DepartmentScreen;
