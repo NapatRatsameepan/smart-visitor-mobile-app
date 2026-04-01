@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Typography } from '@/constants/fonts';
+import { COLORS } from '@/constants/colors';
 
 interface PaginationProps {
     current: number;
@@ -57,19 +59,20 @@ const styles = StyleSheet.create({
     button: {
         paddingVertical: 8,
         paddingHorizontal: 15,
-        backgroundColor: '#1A2433',
+        backgroundColor: COLORS.main,
         borderRadius: 6
     },
     disabled: {
-        backgroundColor: '#CCC'
+        backgroundColor: COLORS.grey
     },
     buttonText: {
         color: '#FFF',
-        fontWeight: 'bold'
+        fontFamily: Typography.bold,
     },
     info: {
         fontSize: 14,
-        color: '#666'
+        color: '#666',
+        fontFamily: Typography.regular,
     }
 });
 

@@ -1,36 +1,60 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, TextInput, Image } from 'react-native';
 import MainLayout from '../../../components/MainLayout';
 import Pagination from '../../../components/Pagination';
+import { Typography } from '@/constants/fonts';
+import { COLORS } from '@/constants/colors';
 
 const DepartmentScreen = () => {
     const router = useRouter();
 
-    // ส่วนจัดการหน้า
+    // ส่วนจัดการหน้าและคำค้นหา
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 5;
+    const [searchQuery, setSearchQuery] = useState(''); // State สำหรับเก็บคำค้นหา
     const itemsPerPage = 10;
 
-    // ข้อมูลจำลองที่รันตามเลขหน้า
-    const departments = Array(itemsPerPage).fill(null).map((_, index) => {
-        const globalIndex = ((currentPage - 1) * itemsPerPage) + (index + 1);
-        return {
-            id: globalIndex,
-            name: globalIndex === 1 ? 'ฝ่ายขาย' : globalIndex === 2 ? 'ฝ่ายซ่อมบำรุง' : `แผนกที่ ${globalIndex}`
-        };
-    });
+    // 1. ข้อมูลจำลองทั้งหมด (Mock Data) เพื่อให้ค้นหาได้ครอบคลุม
+    const allDepartments = useMemo(() => {
+        return Array(50).fill(null).map((_, index) => {
+            const id = index + 1;
+            let name = `แผนกที่ ${id}`;
+            if (id === 1) name = 'ฝ่ายขาย';
+            if (id === 2) name = 'ฝ่ายซ่อมบำรุง';
+            if (id === 3) name = 'ฝ่ายบัญชี';
+            if (id === 4) name = 'ฝ่ายบุคคล';
+            return { id, name };
+        });
+    }, []);
+
+    // 2. Logic การค้นหา (Filtering) รองรับทั้งไทยและอังกฤษ
+    const filteredDepartments = useMemo(() => {
+        return allDepartments.filter(item =>
+            item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [searchQuery, allDepartments]);
+
+    // 3. คำนวณ Pagination จากข้อมูลที่กรองแล้ว
+    const totalPages = Math.ceil(filteredDepartments.length / itemsPerPage) || 1;
+    const displayData = filteredDepartments.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     const renderItem = ({ item }: { item: any }) => (
         <View style={styles.tableRow}>
-            <Text style={{ width: 40, color: '#333' }}>{item.id}</Text>
-            <Text style={{ flex: 1, color: '#333' }}>{item.name}</Text>
+            <Text style={{ width: 40, color: '#333', fontFamily: Typography.regular }}>{item.id}</Text>
+            <Text style={{ flex: 1, color: '#333', fontFamily: Typography.regular }}>{item.name}</Text>
             <TouchableOpacity
                 onPress={() => router.push('/(tabs)/department/DepartmentDetailScreen')}
-                style={{ width: 60, alignItems: 'flex-end' }}
+                style={{ width: 60, alignItems: 'center' }}
             >
-                <Ionicons name="document-text-outline" size={22} color="#1A2433" />
+                <Image
+                    source={require('../../../assets/Desk_alt.png')}
+                    style={{ width: 22, height: 22 }}
+                    resizeMode="contain"
+                    tintColor={COLORS.main}
+                />
             </TouchableOpacity>
         </View>
     );
@@ -42,22 +66,36 @@ const DepartmentScreen = () => {
                     <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
                         <Text style={styles.backText}>‹ ย้อนกลับ</Text>
                     </TouchableOpacity>
+
+                    {/* เปลี่ยนเป็น TextInput เพื่อให้พิมพ์ค้นหาได้จริง */}
                     <View style={styles.searchBox}>
-                        <Text style={styles.searchText}>ค้นหาที่นี่</Text>
+                        <TextInput
+                            style={styles.searchInput}
+                            placeholder="ค้นหาที่นี่"
+                            placeholderTextColor="#ccc"
+                            value={searchQuery}
+                            onChangeText={(text) => {
+                                setSearchQuery(text);
+                                setCurrentPage(1); // เมื่อค้นหาให้กลับไปเริ่มที่หน้า 1
+                            }}
+                        />
                     </View>
                 </View>
 
                 <View style={styles.tableHeader}>
                     <Text style={[styles.headerCol, { width: 40 }]}>#</Text>
                     <Text style={[styles.headerCol, { flex: 1 }]}>แผนก</Text>
-                    <Text style={[styles.headerCol, { width: 60, textAlign: 'right' }]}>เพิ่มเติม</Text>
+                    <Text style={[styles.headerCol, { width: 60, textAlign: 'center' }]}>ดู</Text>
                 </View>
 
                 <FlatList
-                    data={departments}
+                    data={displayData}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={
+                        <Text style={{ textAlign: 'center', marginTop: 20, color: '#999', fontFamily: Typography.regular }}>ไม่พบข้อมูลแผนก</Text>
+                    }
                 />
 
                 <Pagination
@@ -65,8 +103,6 @@ const DepartmentScreen = () => {
                     total={totalPages}
                     onPageChange={(page: number) => setCurrentPage(page)}
                 />
-
-                <Text style={styles.versionText}>v 0.0.1 - ME Group Enterprise Co., Ltd. 2025</Text>
             </View>
         </MainLayout>
     );
@@ -76,13 +112,28 @@ const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 },
     topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 },
     backBtn: { flexDirection: 'row', alignItems: 'center' },
-    backText: { fontSize: 18, fontWeight: 'bold', color: '#1A2433' },
-    searchBox: { borderWidth: 1, borderColor: '#eee', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 6, minWidth: 100 },
-    searchText: { color: '#ccc', fontSize: 12, textAlign: 'center' },
-    tableHeader: { flexDirection: 'row', backgroundColor: '#1A2433', padding: 12, borderRadius: 4 },
-    headerCol: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
+    backText: { fontSize: 18, fontFamily: Typography.bold, color: COLORS.main },
+    searchBox: {
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        paddingHorizontal: 10,
+        borderRadius: 6,
+        minWidth: 120,
+        height: 35,
+        justifyContent: 'center'
+    },
+    searchInput: {
+        color: '#333',
+        fontSize: 12,
+        padding: 0,
+        fontFamily: Typography.regular
+    },
+    tableHeader: { flexDirection: 'row', backgroundColor: COLORS.main, padding: 12, borderRadius: 4 },
+    headerCol: { color: '#fff', fontFamily: Typography.bold, fontSize: 12 },
     tableRow: { flexDirection: 'row', padding: 15, borderBottomWidth: 1, borderBottomColor: '#eee', alignItems: 'center' },
-    versionText: { textAlign: 'center', color: '#ccc', fontSize: 10, paddingVertical: 20 }
+    versionText: { textAlign: 'center', color: '#ccc', fontSize: 10, paddingVertical: 20, fontFamily: Typography.regular }
 });
 
 export default DepartmentScreen;
+
+

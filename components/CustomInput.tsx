@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.bold,
     color: COLORS.main,
     fontSize: 16,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   inputContainer: {
     position: 'relative',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 6,
+    borderRadius: 8,
     paddingTop: 4,
     paddingBottom: 4,
     paddingLeft: 12,
