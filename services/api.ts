@@ -1,18 +1,37 @@
+import Constants from 'expo-constants';
+
 /**
  * Centralized API Service for the Mobile App.
- * Using fetch for simplicity, but can be swapped for Axios.
+ * Automatically detects the backend URL based on the environment.
  */
 
-// Replace with your actual backend IP (e.g., http://192.168.1.x:3000)
-// For local testing on Emulator, you can use http://10.0.2.2:3000
-const BASE_URL = /*process.env.EXPO_PUBLIC_API_URL || */ 'http://192.168.1.221:3000';
+const getBaseUrl = () => {
+  // 1. If running on Web
+  if (typeof window !== 'undefined') {
+    return 'http://localhost:3000';
+  }
+
+  // 2. If running on Mobile (Emulator or Physical Device)
+  // Get the debugger host (the IP of the machine running the packager)
+  const debuggerHost = Constants.expoConfig?.hostUri;
+  const localhost = debuggerHost?.split(':')[0];
+
+  if (!localhost) {
+    // Fallback if hostUri is not available
+    return 'http://10.0.2.2:3000'; // Default for Android Emulator
+  }
+
+  return `http://${localhost}:3000`;
+};
+
+const BASE_URL = getBaseUrl();
+console.log('📡 API Connected to:', BASE_URL);
 
 const apiRequest = async (endpoint: string, method: string = 'GET', body: any = null) => {
   const options: RequestInit = {
     method,
     headers: {
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${token}` // Future Auth integration
     },
   };
 
@@ -33,7 +52,7 @@ const apiRequest = async (endpoint: string, method: string = 'GET', body: any = 
 export const apiService = {
   // OCR Endpoints
   ocr: {
-    analyzeCombined: (idBase64: string, vehicleBase64: string) => 
+    analyzeCombined: (idBase64: string, vehicleBase64: string) =>
       apiRequest('/api/ocr/analyze-combined', 'POST', { idImage: idBase64, vehicleImage: vehicleBase64 }),
   },
 
