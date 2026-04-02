@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
 /**
@@ -7,7 +8,7 @@ import Constants from 'expo-constants';
 
 const getBaseUrl = () => {
   // 1. If running on Web
-  if (typeof window !== 'undefined') {
+  if (Platform.OS === 'web') {
     return 'http://localhost:3001';
   }
 
@@ -16,12 +17,16 @@ const getBaseUrl = () => {
   const debuggerHost = Constants.expoConfig?.hostUri;
   const localhost = debuggerHost?.split(':')[0];
 
-  if (!localhost) {
-    // Fallback if hostUri is not available
-    return 'http://10.0.2.2:3001'; // Default for Android Emulator
+  if (localhost) {
+    return `http://${localhost}:3001`;
   }
 
-  return `http://${localhost}:3001`;
+  // Fallback if hostUri is not available
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:3001'; // Default for Android Emulator reaching Docker Host
+  }
+
+  return 'http://localhost:3001';
 };
 
 const BASE_URL = getBaseUrl();
